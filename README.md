@@ -29,7 +29,7 @@ The Terraform Wrapper for the Lambda functions service simplifies the execution 
 ### 🔗 External Modules
 | Name | Version |
 |------|------:|
-| [terraform-aws-modules/lambda/aws](https://github.com/terraform-aws-modules/lambda-aws) | 8.0.1 |
+| [terraform-aws-modules/lambda/aws](https://github.com/terraform-aws-modules/terraform-aws-lambda) | 8.0.1 |
 
 
 
@@ -48,13 +48,13 @@ lambda_parameters = {
     runtime                 = "python3.9"
     create_package          = false
     ignore_source_code_hash = true
-    ## Si se habilita solamente attach_vpc usa los valores default de los datasources
+    ## If only attach_vpc is enabled, it uses the default values from datasources
     attach_vpc = true
-    ## Filtro por nombre de vpc modificando datasources
+    ## Filter by VPC name modifying datasources
     #vpc_name = "dmc-prd"
     #subnet_name = "dmc-prd-public*"
     #security_group = "dmc-prd-default"
-    ## Uso de ids como variables
+    ## Using IDs as variables
     #vpc_subnet_ids = ["subnet-0816f01da43f4f564"]
     #vpc_security_group_ids  = ["sg-0281b2c2fff506cea"]
     memory_size              = 256
@@ -172,7 +172,7 @@ lambda_parameters = {
       #   schedule     = "cron(0 0 ? * * 0)"
       # }
 
-      ## Primero crear los recursos y despues habilitar los triggers
+      ## First create the resources and then enable the triggers
       # "trigger-05" = {
       #   trigger_type            = "sqs"
       #   source_arn              = aws_sqs_queue.example.arn
@@ -195,7 +195,7 @@ lambda_parameters = {
       # }
 
     }
-    ## Habilita la interaccion entre la lambda y los triggers que tienen EventMappings como SQS y DynamoDB
+    ## Enables interaction between lambda and triggers that have EventMappings like SQS and DynamoDB
     # attach_policies    = true
     # number_of_policies = 2
     # policies = [
