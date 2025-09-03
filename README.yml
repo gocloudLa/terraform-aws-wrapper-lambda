@@ -187,10 +187,10 @@ quick_start: |
   </details>
 features:
   - icon: 🚀
-    title: Initial deployment
-    short_description: Deploys a Lambda function from a README.MD zip file
+    title: Zip deployment
+    short_description: Deploys a Lambda function from a zip file
     long_description: |
-      Deploy a lambda function with a zip file that includes a single README.MD. This avoids having to version the source code of the function in Terraform.<br/>
+      Deploy a lambda function with a zip file. This avoids having to version the source code of the function in Terraform.<br/>
       To activate this feature, the following variables must be configured
     examples:
       - title: Configuration Code
