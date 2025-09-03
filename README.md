@@ -10,7 +10,7 @@ The Terraform Wrapper for the Lambda functions service simplifies the execution 
 
 ### ✨ Features
 
-- 🚀 [Initial deployment](#initial-deployment) - Deploys a Lambda function from a README.MD zip file
+- 🚀 [Zip deployment](#zip-deployment) - Deploys a Lambda function from a zip file
 
 - 🔄 [Simplification of triggers - Load Balancer](#simplification-of-triggers---load-balancer) - Deploys a Lambda function triggered by an Application Load Balancer
 
@@ -29,7 +29,7 @@ The Terraform Wrapper for the Lambda functions service simplifies the execution 
 ### 🔗 External Modules
 | Name | Version |
 |------|------:|
-| [terraform-aws-modules/lambda/aws](https://github.com/terraform-aws-modules/terraform-aws-lambda) | 8.0.1 |
+| <a href="https://github.com/terraform-aws-modules/terraform-aws-lambda" target="_blank">terraform-aws-modules/lambda/aws</a> | 8.0.1 |
 
 
 
@@ -212,8 +212,8 @@ lambda_parameters = {
 
 ## 🔧 Additional Features Usage
 
-### Initial deployment
-Deploy a lambda function with a zip file that includes a single README.MD. This avoids having to version the source code of the function in Terraform.<br/>
+### Zip deployment
+Deploy a lambda function with a zip file. This avoids having to version the source code of the function in Terraform.<br/>
 To activate this feature, the following variables must be configured
 
 
