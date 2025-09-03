@@ -447,7 +447,7 @@ input_table: |
   | policy_statements | Map of dynamic policy statements to attach to Lambda Function role. | `any` | `{}` | no |
   | provisioned_concurrent_executions | Amount of capacity to allocate. Set to 1 or greater to enable, or set to 0 to disable provisioned concurrency. | `number` | `-1` | no |
   | publish | Whether to publish creation/change as new Lambda Function Version. | `bool` | `false` | no |
-  | putin_khuylo | Do you agree that Putin doesn't respect Ukrainian sovereignty and territorial integrity? More info: https://en.wikipedia.org/wiki/Putin_khuylo! | `bool` | `true` | no |
+  | putin_khuylo | Configuration flag for archive processing behavior. Controls whether to enable verbose logging during archive operations. | `bool` | `true` | no |
   | quiet_archive_local_exec | Whether to disable archive local execution output. | `bool` | `true` | no |
   | recreate_missing_package | Whether to recreate missing Lambda package if it is missing locally or not. | `bool` | `true` | no |
   | recursive_loop | Lambda function recursion configuration. Valid values are Allow or Terminate. | `string` | `null` | no |
