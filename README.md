@@ -538,14 +538,6 @@ triggers = {
 
 
 
-## ⚠️ Important Notes
-- **⚠️ SNS Topic Required:** The SNS topic must be deployed beforehand - set `topic_arn = "arn:aws:sns:us-east-1:123456789:my-topic"`
-- **⚠️ Prerequisite S3 Bucket:** The S3 bucket must be deployed beforehand - set `bucket = "my-bucket-name"`
-- **⚠️ Existing API Gateway Required:** The API Gateway must be deployed before creating the endpoint - set `depends_on = [aws_api_gateway_rest_api.example]`
-- **⚠️ No API Gateway Rest Support:** The Terraform configuration does not currently support the API Gateway Rest parameter - set `api_gateway_rest_enabled = false`
-- **⚠️ Prerequisite Resources:** The SQS queue or DynamoDB table stream must be deployed prior to using this resource - set `depends_on = [aws_sqs_queue.example, aws_dynamodb_table.example]`
-
-
 
 ---
 
