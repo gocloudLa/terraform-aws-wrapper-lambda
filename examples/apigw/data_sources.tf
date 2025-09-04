@@ -1,7 +1,7 @@
 data "aws_vpc" "this" {
   filter {
     name   = "tag:Name"
-    values = ["${local.common_name_base}"]
+    values = ["${local.common_name_prefix}"]
   }
 }
 
@@ -12,7 +12,7 @@ data "aws_subnets" "private" {
   }
 
   tags = {
-    Name = "${local.common_name_base}-private*"
+    Name = "${local.common_name_prefix}-private*"
   }
 }
 
@@ -23,7 +23,7 @@ data "aws_subnets" "public" {
   }
 
   tags = {
-    Name = "${local.common_name_base}-public*"
+    Name = "${local.common_name_prefix}-public*"
   }
 }
 
@@ -34,6 +34,6 @@ data "aws_subnets" "database" {
   }
 
   tags = {
-    Name = "${local.common_name_base}-db*"
+    Name = "${local.common_name_prefix}-db*"
   }
 }
