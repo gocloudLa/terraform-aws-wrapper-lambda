@@ -138,5 +138,5 @@ module "lambda" {
   trusted_entities                             = try(each.value.trusted_entities, var.lambda_defaults.trusted_entities, [])
   use_existing_cloudwatch_log_group            = try(each.value.use_existing_cloudwatch_log_group, var.lambda_defaults.use_existing_cloudwatch_log_group, false)
 
-  tags = merge(local.common_tags, { workload = each.key })
+  tags = merge(local.common_tags, { workload = each.key }, try(each.value.tags, var.lambda_defaults.tags, null))
 }
