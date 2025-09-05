@@ -1,0 +1,7 @@
+title: "Complete Example"
+description: "This example demonstrates a comprehensive setup of AWS Lambda functions with various configurations and triggers."
+main_purpose: "The main purpose is to showcase the deployment and configuration of multiple Lambda functions with different triggers and settings."
+key_features:
+  - "**Simple Lambda Function**: Demonstrates a basic Lambda function with VPC attachment and S3 policy."
+  - "**Lambda With Alb Triggers**: Illustrates a Lambda function triggered by an Application Load Balancer with specific listener rules."
+  - "**Lambda With Multiple Triggers**: Shows how to configure a Lambda function with multiple potential triggers such as SNS, SQS, EventBridge, and more."
