@@ -32,7 +32,7 @@ resource "aws_cloudwatch_event_rule" "this" {
   role_arn            = try(each.value.role_arn, null)
   state               = try(each.value.state, "ENABLED")
 
-  tags = local.common_tags
+  tags = merge(local.common_tags, { workload = each.key.lambda_name }, try(each.value.tags, var.lambda_defaults.tags, null))
 }
 
 resource "aws_cloudwatch_event_target" "this" {

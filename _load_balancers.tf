@@ -47,7 +47,7 @@ resource "aws_lb_target_group" "this" {
 
   lambda_multi_value_headers_enabled = each.value.lambda_multi_value_headers_enabled
 
-  tags = local.common_tags
+  tags = merge(local.common_tags, { workload = each.key }, try(each.value.tags, var.lambda_defaults.tags, null))
 
 }
 
@@ -271,7 +271,7 @@ resource "aws_lb_listener_rule" "this" {
     }
   }
 
-  tags = local.common_tags
+  tags = merge(local.common_tags, { workload = each.key.target_group_key }, try(each.value.tags, var.lambda_defaults.tags, null))
 }
 
 resource "aws_lb_target_group_attachment" "this" {
