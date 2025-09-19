@@ -271,7 +271,7 @@ resource "aws_lb_listener_rule" "this" {
     }
   }
 
-  tags = merge(local.common_tags, { workload = each.key.target_group_key }, try(each.value.tags, var.lambda_defaults.tags, null))
+  tags = merge(local.common_tags, { workload = each.value.target_group_key }, try(each.value.tags, var.lambda_defaults.tags, null))
 }
 
 resource "aws_lb_target_group_attachment" "this" {
