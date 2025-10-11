@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/gocloudLa/terraform-aws-wrapper-lambda/compare/v1.0.0...v1.0.1) (2025-10-11)
+
+
+### Bug Fixes
+
+* **module:** add custom tags in eventbridge & balancers ([#3](https://github.com/gocloudLa/terraform-aws-wrapper-lambda/issues/3)) ([a479262](https://github.com/gocloudLa/terraform-aws-wrapper-lambda/commit/a4792628d4686179c713b6a231b243bbc4d72281))
+
 ## 1.0.0 (2025-09-05)
 
 
