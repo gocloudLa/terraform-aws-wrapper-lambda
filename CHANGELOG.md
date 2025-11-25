@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/gocloudLa/terraform-aws-wrapper-lambda/compare/v1.0.1...v1.0.2) (2025-11-25)
+
+
+### Bug Fixes
+
+* **versions:** remove unused provider random ([#5](https://github.com/gocloudLa/terraform-aws-wrapper-lambda/issues/5)) ([d30047d](https://github.com/gocloudLa/terraform-aws-wrapper-lambda/commit/d30047d58c5d0d771864111bcc9d1d8aff085a8f))
+
 ## [1.0.1](https://github.com/gocloudLa/terraform-aws-wrapper-lambda/compare/v1.0.0...v1.0.1) (2025-10-11)
 
 
