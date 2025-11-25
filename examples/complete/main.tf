@@ -51,7 +51,7 @@ module "wrapper_lambda" {
       triggers = {
         "trigger-01" = {
           trigger_type  = "alb"
-          alb_name      = "dmc-prd-core-external-00"
+          alb_name      = "dmc-lab-example-internal-00"
           listener_port = 443
           # lambda_multi_value_headers_enabled = false # Default: false
           listener_rules = {
