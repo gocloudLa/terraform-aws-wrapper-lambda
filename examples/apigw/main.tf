@@ -46,7 +46,7 @@ module "wrapper_lambda" {
 ##### APIGWV2 Testing ####
 module "api_gateway" {
   source  = "terraform-aws-modules/apigateway-v2/aws"
-  version = "4.0.0"
+  version = "6.1.0"
 
   name          = "${local.common_name}-http"
   description   = "My HTTP API Gateway V2"

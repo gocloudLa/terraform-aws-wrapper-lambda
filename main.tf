@@ -1,7 +1,7 @@
 module "lambda" {
   for_each = var.lambda_parameters
   source   = "terraform-aws-modules/lambda/aws"
-  version  = "8.0.1"
+  version  = "8.8.0"
 
   create_function = true
 
