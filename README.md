@@ -88,12 +88,14 @@ create_package          = false
 
 
 ### Simplification of triggers - Load Balancer
-Deploy a lambda function that has an Application Load Balancer as a trigger. This functionality will automatically create the Target Group and the resources and link them as a trigger for the lambda function.
+Deploy a lambda function that has an Application Load Balancer as a trigger. This functionality will automatically create the Target Group and the resources and link them as a trigger for the lambda function.<br/>
+See **Lambda invoke permissions** in Important Notes. `examples/complete` sets `create_current_version_allowed_triggers = false` for ALB triggers.
 
 
 <details><summary>Configuration Code</summary>
 
 ```hcl
+create_current_version_allowed_triggers = false
 triggers = {
   "trigger-01" = {
     trigger_type  = "alb"
@@ -172,12 +174,14 @@ triggers = {
 
 ### Simplification of triggers - S3
 Deploy a lambda function that is triggered by an S3 bucket event. This functionality will create an S3 notification resource, which will allow defining the type of event, directory, and object type that will invoke the lambda function.<br/>
-> **⚠️ Warning:** It is required that the S3 bucket is deployed beforehand.
+The wrapper registers S3 invoke permissions through the underlying `terraform-aws-modules/lambda/aws` module (`allowed_triggers`). With the module defaults (`publish = false`, `create_current_version_allowed_triggers = true`), Terraform cannot attach permissions to a qualified function version and the S3 notification apply often fails. Set **`publish = true`** on the Lambda entry (recommended for S3), or set **`create_current_version_allowed_triggers = false`** and rely on unqualified-alias permissions.<br/>
+> **⚠️ Warning:** The S3 bucket must exist before enabling the trigger. Deploy the bucket first, then uncomment or add the trigger (see `examples/complete/main.tf`, S3 notification section).
 
 
 <details><summary>Configuration Code</summary>
 
 ```hcl
+publish = true
 triggers = {
   "trigger-02" = {
     trigger_type  = "s3_notification"
@@ -257,6 +261,11 @@ triggers = {
 ## 📑 Inputs
 | Name                                         | Description                                                                                                                                                                                                                                                                    | Type     | Default                  | Required |
 | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------- | ------------------------ | -------- |
+| triggers                                     | Map of simplified trigger definitions; the wrapper creates permissions, notifications, rules, and related resources per `trigger_type`.                                                                                                                                        | `map`    | `{}`                     | no       |
+| attach_vpc                                   | When true, resolve `vpc_subnet_ids` and `vpc_security_group_ids` from VPC data sources using `vpc_name`, `subnet_name`, and `security_group`.                                                                                                                                  | `bool`   | `false`                  | no       |
+| vpc_name                                     | VPC tag:Name filter when `attach_vpc = true`.                                                                                                                                                                                                                                  | `string` | platform default         | no       |
+| subnet_name                                  | Subnet tag:Name filter when `attach_vpc = true`.                                                                                                                                                                                                                               | `string` | platform default         | no       |
+| security_group                               | Security group tag:Name when `attach_vpc = true`.                                                                                                                                                                                                                              | `string` | platform default         | no       |
 | allowed_triggers                             | Map of allowed triggers to create Lambda permissions                                                                                                                                                                                                                           | `map`    | `{}`                     | no       |
 | architectures                                | Instruction set architecture for your Lambda function. Valid values are ["x86_64"] and ["arm64"].                                                                                                                                                                              | `list`   | `null`                   | no       |
 | artifacts_dir                                | Directory name where artifacts should be stored                                                                                                                                                                                                                                | `string` | `"builds"`               | no       |
@@ -285,7 +294,7 @@ triggers = {
 | cors                                         | CORS settings to be used by the Lambda Function URL                                                                                                                                                                                                                            | `any`    | `{}`                     | no       |
 | create                                       | Controls whether resources should be created                                                                                                                                                                                                                                   | `bool`   | `true`                   | no       |
 | create_async_event_config                    | Controls whether async event configuration for Lambda Function/Alias should be created                                                                                                                                                                                         | `bool`   | `false`                  | no       |
-| create_current_version_allowed_triggers      | Whether to allow triggers on current version of Lambda Function (this will revoke permissions from previous version because Terraform manages only current resources)                                                                                                          | `bool`   | `true`                   | no       |
+| create_current_version_allowed_triggers      | Whether to create invoke permissions on the published current version. Set to `false` when using triggers without `publish = true` (see `examples/complete`).                                                                                                                  | `bool`   | `true`                   | no       |
 | create_current_version_async_event_config    | Whether to allow async event configuration on current version of Lambda Function (this will revoke permissions from previous version because Terraform manages only current resources)                                                                                         | `bool`   | `true`                   | no       |
 | create_function                              | Controls whether Lambda Function resource should be created                                                                                                                                                                                                                    | `bool`   | `true`                   | no       |
 | create_lambda_function_url                   | Controls whether the Lambda Function URL resource should be created                                                                                                                                                                                                            | `bool`   | `false`                  | no       |
@@ -350,7 +359,7 @@ triggers = {
 | policy_name                                  | IAM policy name. It overrides the default value, which is the same as role_name.                                                                                                                                                                                               | `string` | `null`                   | no       |
 | policy_statements                            | Map of dynamic policy statements to attach to Lambda Function role.                                                                                                                                                                                                            | `any`    | `{}`                     | no       |
 | provisioned_concurrent_executions            | Amount of capacity to allocate. Set to 1 or greater to enable, or set to 0 to disable provisioned concurrency.                                                                                                                                                                 | `number` | `-1`                     | no       |
-| publish                                      | Whether to publish creation/change as new Lambda Function Version.                                                                                                                                                                                                             | `bool`   | `false`                  | no       |
+| publish                                      | Publish a new Lambda version on each change. Set to `true` when using built-in triggers (required for reliable S3 notifications unless `create_current_version_allowed_triggers = false`).                                                                                     | `bool`   | `false`                  | no       |
 | putin_khuylo                                 | Configuration flag for archive processing behavior. Controls whether to enable verbose logging during archive operations.                                                                                                                                                      | `bool`   | `true`                   | no       |
 | quiet_archive_local_exec                     | Whether to disable archive local execution output.                                                                                                                                                                                                                             | `bool`   | `true`                   | no       |
 | recreate_missing_package                     | Whether to recreate missing Lambda package if it is missing locally or not.                                                                                                                                                                                                    | `bool`   | `true`                   | no       |
@@ -395,6 +404,13 @@ triggers = {
 
 
 
+
+
+## ⚠️ Important Notes
+- **Examples:** Runnable layouts live under [`examples/complete`](examples/complete) (simple Lambda, ALB, and commented SNS, EventBridge, SQS, DynamoDB, and S3 triggers) and [`examples/apigw`](examples/apigw) (HTTP API Gateway v2). Use those directories together with this README.
+- **⚠️ Lambda invoke permissions:** Built-in `triggers` merge into `allowed_triggers` on `terraform-aws-modules/lambda/aws`. With defaults (`publish = false`, `create_current_version_allowed_triggers = true`), permission creation for the current version fails when only `$LATEST` exists. For any trigger (especially **S3**), set **`publish = true`** on the function entry, or set **`create_current_version_allowed_triggers = false`** (as in `examples/complete` for ALB and `ExTriggers`).
+- **⚠️ S3 two-step apply:** Create the bucket (see commented `module "s3_bucket"` in `examples/complete/main.tf`), apply, then enable the `s3_notification` trigger and apply again.
+- **ℹ️ External dependencies:** SNS topics, SQS queues, DynamoDB streams, API Gateway APIs, and S3 buckets must exist before their trigger blocks are enabled.
 
 
 
