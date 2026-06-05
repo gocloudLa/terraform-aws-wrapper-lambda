@@ -1,18 +1,18 @@
 # Complete Example 🚀
 
-This example demonstrates a comprehensive setup of AWS Lambda functions with various configurations and triggers.
+Demonstrates multiple Lambda functions with VPC attachment, ALB triggers, and commented patterns for SNS, EventBridge, SQS, DynamoDB, S3, and API Gateway.
 
 ## 🔧 What's Included
 
 ### Analysis of Terraform Configuration
 
 #### Main Purpose
-The main purpose is to showcase the deployment and configuration of multiple Lambda functions with different triggers and settings.
+Reference implementation for `lambda_parameters` keys and two-step trigger enablement; see `main.tf` for full configuration.
 
 #### Key Features Demonstrated
-- **Simple Lambda Function**: Demonstrates a basic Lambda function with VPC attachment and S3 policy.
-- **Lambda With Alb Triggers**: Illustrates a Lambda function triggered by an Application Load Balancer with specific listener rules.
-- **Lambda With Multiple Triggers**: Shows how to configure a Lambda function with multiple potential triggers such as SNS, SQS, EventBridge, and more.
+- **ExSimple**: Basic function with `attach_vpc` and optional IAM policy statements.
+- **ExBalancer**: ALB target group and listener rules via `trigger_type = "alb"` with `create_current_version_allowed_triggers = false`.
+- **ExTriggers**: Commented triggers for SNS, EventBridge, SQS, DynamoDB, and S3; S3 requires `publish = true` (or `create_current_version_allowed_triggers = false`) and a pre-created bucket (`module "s3_bucket"` block in `main.tf`).
 
 ## 🚀 Quick Start
 
