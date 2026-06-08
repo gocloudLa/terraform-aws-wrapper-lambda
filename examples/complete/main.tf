@@ -85,7 +85,7 @@ module "wrapper_lambda" {
     "ExTriggers" = {
       # create = false
 
-      description             = "Multiple trigger example"
+      description = "Multiple trigger example"
       # publish = true  # Enable when using s3_notification (or set create_current_version_allowed_triggers = false)
       handler                 = "app.py"
       runtime                 = "python3.9"
