@@ -81,11 +81,12 @@ module "wrapper_lambda" {
       environment_variables = {}
     }
 
-    # Lambda function mounted in VPC
+    # Lambda function with optional triggers (see commented blocks and S3 bucket module below)
     "ExTriggers" = {
       # create = false
 
-      description             = "Multiple trigger example"
+      description = "Multiple trigger example"
+      # publish = true  # Enable when using s3_notification (or set create_current_version_allowed_triggers = false)
       handler                 = "app.py"
       runtime                 = "python3.9"
       ignore_source_code_hash = true
@@ -135,6 +136,7 @@ module "wrapper_lambda" {
         #   source_arn        = aws_dynamodb_table.example.stream_arn
         #   starting_position = "LATEST"
         # }
+        # {publish = true} is required for S3 (or use {create_current_version_allowed_triggers = false} instead of {publish = true}):
         # "trigger-02" = {
         #   trigger_type  = "s3_notification"
         #   bucket_name   = "lambda-notification-${local.common_name}"
