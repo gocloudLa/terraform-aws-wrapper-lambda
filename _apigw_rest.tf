@@ -214,6 +214,7 @@ resource "aws_api_gateway_deployment" "this" {
     aws_api_gateway_integration.this,
   ]
 }
+
 resource "aws_api_gateway_stage" "this" {
   for_each = local.apigateway_rest_names
 
@@ -223,4 +224,3 @@ resource "aws_api_gateway_stage" "this" {
 
   tags = local.common_tags
 }
-
