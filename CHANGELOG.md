@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/gocloudLa/terraform-aws-wrapper-lambda/compare/v1.0.2...v1.1.0) (2026-07-14)
+
+
+### Features
+
+* **triggers:** add apigateway rest support ([#9](https://github.com/gocloudLa/terraform-aws-wrapper-lambda/issues/9)) ([eee8ed7](https://github.com/gocloudLa/terraform-aws-wrapper-lambda/commit/eee8ed75603bb385ba0c34893a45c30f673f73eb))
+
 ## [1.0.2](https://github.com/gocloudLa/terraform-aws-wrapper-lambda/compare/v1.0.1...v1.0.2) (2025-11-25)
 
 
