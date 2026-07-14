@@ -180,14 +180,12 @@ resource "aws_api_gateway_integration" "this" {
 }
 
 locals {
-  # Redeployment signature per REST API: hashes every resource/method/integration id it owns so
-  # that adding, removing or changing a Lambda-backed endpoint forces a new deployment.
   apigateway_rest_signature = {
     for name in local.apigateway_rest_names :
     name => sha1(jsonencode({
-      resources    = { for k, v in local.apigw_rest_resource_all : k => v.id if startswith(k, "${name}//") }
-      methods      = { for k, v in aws_api_gateway_method.this : k => v.id if local.create_apigateway_rest[k].rest_api_name == name }
-      integrations = { for k, v in aws_api_gateway_integration.this : k => v.id if local.create_apigateway_rest[k].rest_api_name == name }
+      resources    = { for k, v in local.apigw_rest_resource_all : k => v if startswith(k, "${name}//") }
+      methods      = { for k, v in aws_api_gateway_method.this : k => v if local.create_apigateway_rest[k].rest_api_name == name }
+      integrations = { for k, v in aws_api_gateway_integration.this : k => v if local.create_apigateway_rest[k].rest_api_name == name }
     }))
   }
 
@@ -216,7 +214,6 @@ resource "aws_api_gateway_deployment" "this" {
     aws_api_gateway_integration.this,
   ]
 }
-
 resource "aws_api_gateway_stage" "this" {
   for_each = local.apigateway_rest_names
 
@@ -226,3 +223,4 @@ resource "aws_api_gateway_stage" "this" {
 
   tags = local.common_tags
 }
+
