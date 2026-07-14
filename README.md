@@ -22,6 +22,8 @@ The Terraform Wrapper for the Lambda functions service simplifies the execution 
 
 - 🔍 [Simplification of triggers - HTTP APIGateway](#simplification-of-triggers---http-apigateway) - Deploys a Lambda function with an HTTP API Gateway trigger
 
+- 🧩 [Simplification of triggers - REST APIGateway](#simplification-of-triggers---rest-apigateway) - Deploys a Lambda function with a REST (v1) API Gateway trigger
+
 - 🔧 [Simplification of triggers - SQS and DynamoDB](#simplification-of-triggers---sqs-and-dynamodb) - Deploys Lambda with DynamoDB or SQS triggers and event mappings
 
 
@@ -227,6 +229,34 @@ triggers = {
 </details>
 
 
+### Simplification of triggers - REST APIGateway
+Deploy a lambda function that has a REST APIGateway endpoint as a trigger. This functionality automatically creates the resource tree (nested paths are supported up to 6 segments, e.g. `wallet/{id}/balance`), method, integration, invoke permission and the deployment/stage for the referenced REST API. The REST API itself is not created here: it is looked up by name, typically created by [`terraform-aws-wrapper-apigateway`](https://github.com/gocloudLa/terraform-aws-wrapper-apigateway).<br/>
+When several triggers (in this or other `terraform-aws-wrapper-lambda` calls) attach endpoints to the same `rest_api_name`, each call manages its own deployment/stage; see the important note below.<br/>
+> **⚠️ Warning:** It is required that the REST APIGateway on which the endpoint will be created is deployed beforehand.
+
+
+<details><summary>Configuration Code</summary>
+
+```hcl
+triggers = {
+  "trigger-rest-get" = {
+    trigger_type  = "apigateway_rest"
+    rest_api_name = "dmc-lab-example-rest-00"
+    resource_path = "wallet/{id}/balance"
+    http_method   = "GET"
+    #integration_type        = "AWS_PROXY" # Default
+    #integration_http_method = "POST"       # Default
+    #authorization           = "NONE"       # Default
+    #authorizer_id           = module.wrapper_apigateway.apigateway_rest["rest-00"].authorizers["lambda-authorizer"].id
+    #stage_name              = "lab"         # Default: metadata.key.env
+  }
+}
+```
+
+
+</details>
+
+
 ### Simplification of triggers - SQS and DynamoDB
 Deploy a lambda function that has DynamoDB or SQS as Trigger and Event Mappings. This functionality allows you to avoid having to separately declare the logic of the triggers and event mappings with which we will link the lambda function to these services.<br/>
 > **⚠️ Warning:** It is required that the SQS queue or the DynamoDB table stream be deployed beforehand.
@@ -410,6 +440,7 @@ triggers = {
 - **Examples:** Runnable layouts live under [`examples/complete`](examples/complete) (simple Lambda, ALB, and commented SNS, EventBridge, SQS, DynamoDB, and S3 triggers) and [`examples/apigw`](examples/apigw) (HTTP API Gateway v2). Use those directories together with this README.
 - **⚠️ Lambda invoke permissions:** Built-in `triggers` merge into `allowed_triggers` on `terraform-aws-modules/lambda/aws`. With defaults (`publish = false`, `create_current_version_allowed_triggers = true`), permission creation for the current version fails when only `$LATEST` exists. For any trigger (especially **S3**), set **`publish = true`** on the function entry, or set **`create_current_version_allowed_triggers = false`** (as in `examples/complete` for ALB and `ExTriggers`).
 - **⚠️ S3 two-step apply:** Create the bucket (see commented `module "s3_bucket"` in `examples/complete/main.tf`), apply, then enable the `s3_notification` trigger and apply again.
+- **⚠️ REST APIGateway shared stage:** Each `terraform-aws-wrapper-lambda` call that attaches `apigateway_rest` triggers to the same `rest_api_name` owns its own `aws_api_gateway_deployment`/`aws_api_gateway_stage`. Lambdas sharing a REST API and stage must go through the **same** module call (one `lambda_parameters` map); two separate module calls targeting the same `rest_api_name` + `stage_name` will conflict (`ConflictException: Stage already exists`) since AWS only allows one stage per name. If they must stay separate, use distinct `stage_name` values.
 - **ℹ️ External dependencies:** SNS topics, SQS queues, DynamoDB streams, API Gateway APIs, and S3 buckets must exist before their trigger blocks are enabled.
 
 
